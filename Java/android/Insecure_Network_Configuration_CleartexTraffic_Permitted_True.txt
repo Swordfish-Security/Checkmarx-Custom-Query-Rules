@@ -1,0 +1,7 @@
+//****************************************************//
+//                                                    //
+// Find cleartextTraffic settings in network settings //
+//                                                    //
+//****************************************************//
+
+result = cxXPath.FindXmlAttributesByNameAndValue("*.xml", 8, "cleartextTrafficPermitted", "true", false, true);

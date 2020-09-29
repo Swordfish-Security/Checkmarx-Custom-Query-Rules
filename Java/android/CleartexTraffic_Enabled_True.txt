@@ -1,0 +1,33 @@
+//**********************************************************************//
+//	                                        							//
+//	Check if cleartext traffic enabled		                			//
+//	                                        							//
+//**********************************************************************//
+
+bool isInt = false;
+int sdkVersion = 0;
+int vulnerable_sdk_version = 28;
+
+CxList settings = Find_Android_Settings();
+CxList sdkVersionVar = settings.GetByAncs(All.FindByName("MANIFEST.USES_SDK.ANDROID_TARGETSDKVERSION"));
+CxList SdkVersionVal = strings.GetByAncs(sdkVersionVar.GetAncOfType(typeof(AssignExpr)));
+int sdkVersion = 0;
+isInt = int.TryParse(SdkVersionVal.GetName(), out sdkVersion);
+
+if (isInt){
+	CxList strings = Find_Strings();
+	CxList _false = strings.FindByShortName("false");
+	CxList _true = strings.FindByShortName("true");
+	CxList useClearTextTraffic = settings.FindByName("MANIFEST.APPLICATION.ANDROID_USESCLEARTEXTTRAFFIC");
+	CxList useClearTextTrafficFalse = useClearTextTraffic.DataInfluencedBy(_false);
+	CxList useClearTextTrafficTrue = useClearTextTraffic.DataInfluencedBy(_true);
+	if(sdkVersion < vulnerable_sdk_version){
+		if(useClearTextTraffic.Count == 0 || useClearTextTrafficTrue.Count > 0){
+			result = useClearTextTrafficTrue;
+		}
+	} else {
+		if(useClearTextTrafficTrue.Count > 0){
+			result = useClearTextTrafficTrue;
+		}
+	}
+}

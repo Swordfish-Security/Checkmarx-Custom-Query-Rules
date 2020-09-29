@@ -1,0 +1,72 @@
+//****************************************************//
+//                                                    //
+// Delete FP when library includes in Android project //
+//                                                    //
+//****************************************************//
+
+// Поиск метода release среди всех методов в Gradle файлах
+CxList releaseMethod = Find_Gradle_Method("release");
+
+// Все объекты из файлов build.gradle
+CxList gradleBuildObjects = Find_Gradle_Build_Objects();
+
+// Поиск того, что находится внутри метода "release" среди всех объектов из файлов build.gradle
+CxList methodInvokesUnderRelease = gradleBuildObjects.FindByType(typeof(MethodInvokeExpr)).GetByAncs(releaseMethod);
+
+// Ищем внутри gradle-файлов строку "com.android.library" - это значит, что данный файл относится к библиотеке и его необходимо исключить из правила
+CxList android_library = gradleBuildObjects.FindByName("com.android.library");
+
+// Инициализация пустого массива
+List<string> libraries_path = new List<string> {};
+
+// Проходим через все найденные "дочерние" файлы
+foreach(CxList library in android_library)
+{
+    // Получаем путь к каждому файлу
+	string file_name_library = library.GetFirstGraph().LinePragma.FileName;
+    
+    // Добавляем его в наш массив
+	libraries_path.Add(file_name_library);
+}
+
+// Ищем все вызовы включения обфускации в релизных настройках
+CxList minifyEnabled = methodInvokesUnderRelease.FindByShortName("minifyEnabled");
+
+// Получаем параметры этих вызовов
+CxList minifyValue = gradleBuildObjects.GetParameters(minifyEnabled, 0);
+
+// Ищем среди них включенные
+CxList minifyValueTrue = minifyValue.FindByShortName("true");
+
+// Немного магии, если не нашли стандартным способом :D
+if (minifyValueTrue.Count == 0) {
+	minifyValue = minifyValue.FindByAbstractValue(abstractValue => abstractValue is TrueAbstractValue);
+} else {
+    // А если всё-таки нашли, то предыдущий результат и оставляем
+	minifyValue = minifyValueTrue;	
+}
+
+// Если не нашлось таких методов
+if (minifyValue.Count == 0)
+{
+    // Для более корректного отображения места срабатывания в файле ищем или buildTypes или android
+	CxList tempResult = All.NewCxList();
+	CxList buildTypes = Find_Gradle_Method("buildTypes");
+	if (buildTypes.Count > 0) {
+		tempResult = buildTypes;
+	} else {
+		tempResult = Find_Gradle_Method("android");
+	}
+	
+	// Для каждого из найденных мест срабатывания проходим и определяем, дочерний или основной файлы сборки
+	foreach(CxList res in tempResult)
+	{
+        // Определяем, в каком файле был найден buildType или android методы
+		string file_name_result = res.GetFirstGraph().LinePragma.FileName;
+        
+        // Если такого файла нет в нашем списке "дочерних" файлов - значит это основной файл и его можно добавить в результат
+		if (libraries_path.Contains(file_name_result) == false){
+			result.Add(res);
+		}
+	}
+}

@@ -1,0 +1,21 @@
+//*************************************************************************************//
+//	                                        										   //
+// https://xakep.ru/2017/08/14/android-task-hijacking/                                 //
+// Find startActivity with FLAG_ACTIVITY_NEW_TASK and without FLAG_ACTIVITY_CLEAR_TASK //
+//	                                        										   //
+//*************************************************************************************//
+
+// Find Intents with FLAG_ACTIVITY_NEW_TASK
+CxList new_task = All.DataInfluencedBy(All.FindByName("Intent.FLAG_ACTIVITY_NEW_TASK"));
+
+// Find Intents with FLAG_ACTIVITY_CLEAR_TASK
+CxList clear_task = All.DataInfluencedBy(All.FindByName("Intent.FLAG_ACTIVITY_CLEAR_TASK"));
+
+// Find startActivity method
+CxList startActivity = All.FindByShortName("startActivity");
+
+// Find startActivity method FLAG_ACTIVITY_CLEAR_TASK flag
+CxList start_activity_without_clear_task = (new_task - clear_task).FindByType(typeof(MethodInvokeExpr));
+
+result = start_activity_without_clear_task.DataInfluencingOn(startActivity);
+result = result.ReduceFlow(CxList.ReduceFlowType.ReduceSmallFlow);

@@ -1,0 +1,12 @@
+//*************************************************************************************//
+// Add some variables for privacy violation list                                       //
+//                                                                                     //
+//*************************************************************************************//
+
+result = base.General_privacy_violation_list();
+
+CxList personalList = All.FindByShortNames(new List<string> {
+	"*securitytoken*", 
+	"*sessionid*"}, false);
+
+result.Add(personalList);

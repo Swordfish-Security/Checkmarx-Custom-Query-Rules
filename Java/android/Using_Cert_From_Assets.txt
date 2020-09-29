@@ -1,0 +1,20 @@
+//*****************************************************//
+//	                                        		   //
+// Find certificates or keys in code like              //
+// <name>.der / <name>.cer / private_key / public_key  //
+// and opennig that data from assets                   //
+//	                                        		   //
+//*****************************************************//
+
+// Найдем все сертификаты по маске файла
+CxList find_certs = All.FindByShortNames(new List<string> {"*.der", "*.cer", "*.pem", "*.key"}, false);
+
+// Проверим, где в приложении они используются
+CxList data_used_certs = All.DataInfluencedBy(find_certs);
+
+// И для мобильных приложений - можем поискать методы, где вызывается чтение сертификатов
+// Для других платформ и приложений могут быть различные методы
+CxList methods = All.FindByMemberAccess("*.getAssets");
+
+// Пересечение множеств даст нам результат по использованию локальных сертификатов в приложении
+result = methods * data_used_certs;

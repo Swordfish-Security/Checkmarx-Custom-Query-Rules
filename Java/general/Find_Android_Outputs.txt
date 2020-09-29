@@ -1,0 +1,20 @@
+//*****************************************************//
+//	                                        		   //
+// Add support for Timber and Loggi libraries          //
+//	                                        		   //
+//*****************************************************//
+
+// Получаем результат выполнения базового правила
+result = base.Find_Android_Outputs();
+
+// Дополняем вызовами, которые приходят из библиотеки Timber
+CxList timber = All.FindByExactMemberAccess("Timber.*") +
+	All.FindByShortName("Timber").GetMembersOfTarget();
+
+// Дополняем вызовами, которые приходят из библиотеки Loggi
+CxList loggi = All.FindByExactMemberAccess("Loggi.*") +
+	All.FindByShortName("Loggi").GetMembersOfTarget();
+
+// Добавляем к конечному результату
+result.Add(timber);
+result.Add(loggi);

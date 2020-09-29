@@ -1,0 +1,8 @@
+//************************************************//
+//                                                //
+// Find Sensitive Info                            //
+//                                                //
+//************************************************//
+
+CxList sens_info = Find_Sensitive_Data();
+result = All.DataInfluencingOn(sens_info);

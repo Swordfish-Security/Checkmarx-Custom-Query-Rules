@@ -1,0 +1,17 @@
+//*************************************************************************************//
+// Find usage of hardcoded encryption keys                                             //
+//                                                                                     //
+//*************************************************************************************//
+
+var passwords = Find_Passwords();
+passwords.Add(All.FindByType(typeof(ArrayInitializer)).FindByAssignmentSide(CxList.AssignmentSide.Right));
+var passwords_init = All.FindByInitialization(passwords);
+
+CxList crypto_functions = All.FindByMemberAccess("*.CreateEncryptor");
+var crypto_params = All.GetParameters(crypto_functions);
+
+var flows = crypto_params.InfluencedBy(passwords_init);
+foreach (CxList f in flows.GetCxListByPath()) {
+	var firstNode = f.GetStartAndEndNodes(CxList.GetStartEndNodesType.StartNodesOnly);
+	result.Add(passwords.FindInitialization(firstNode).ConcatenatePath(f));
+}

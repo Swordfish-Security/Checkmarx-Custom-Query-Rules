@@ -1,0 +1,13 @@
+//*****************************************************//
+//	                                        		   //
+// Find certificates or keys in code like              //
+// <name>.der / <name>.cer / private_key / public_key  //
+// and opennig that data from assets                   //
+//	                                        		   //
+//*****************************************************//
+
+CxList find_certs = All.FindByShortNames(new List<string> {"*.der", "*.cer", "*key"}, false);
+CxList data_used_certs = All.DataInfluencedBy(find_certs);
+
+CxList methods = All.FindByMemberAccess("assets.open");
+result = methods * data_used_certs;

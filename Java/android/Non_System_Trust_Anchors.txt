@@ -1,0 +1,28 @@
+//****************************************************//
+//                                                    //
+// Find non system trust-anchors  in network settings //
+//                                                    //
+//****************************************************//
+
+CxList certificates = All.NewCxList();
+CxList certificatesForDebug = All.NewCxList();
+
+foreach (CxXmlDoc doc in cxXPath.GetXmlFiles("*.xml")) 
+{
+	XPathNavigator navigator = doc.CreateNavigator();
+	XPathNodeIterator nodeIterator = navigator.Select("//trust-anchors//certificates[not(@src='system')]");
+	while (nodeIterator.MoveNext())
+	{
+		XPathNavigator currentNodeNavigator = nodeIterator.Current;
+		certificates.Add(cxXPath.CreateXmlNode(currentNodeNavigator, doc, 2, false));
+	}
+	
+	XPathNodeIterator nodeIteratorDebug = navigator.Select("//debug-overrides//trust-anchors//certificates[not(@src='system')]");
+	while (nodeIteratorDebug.MoveNext())
+	{
+		XPathNavigator currentNodeNavigatorDebug = nodeIteratorDebug.Current;
+		certificatesForDebug.Add(cxXPath.CreateXmlNode(currentNodeNavigatorDebug, doc, 2, false));
+	}
+}
+
+result = certificates - certificatesForDebug;
