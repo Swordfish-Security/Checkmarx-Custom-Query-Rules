@@ -1,7 +1,12 @@
-//*************************************************************************************//
-// Find usage of hardcoded encryption keys                                             //
-//                                                                                     //
-//*************************************************************************************//
+/*
+    Поиск ключей шифрования в коде, которые заданы массивом байтов.
+
+    Сниппет:
+    public static readonly byte[] Key = { 153, 218, 226, 145, 167, 101, 132, 182, 143, 133, 91, 234, 217, 150, 90, 126 };
+    public static readonly byte[] Iv = { 127, 114, 213, 125, 211, 150, 175, 106 };
+    ...
+    new CryptoStream(memoryStream, new TripleDESCryptoServiceProvider().CreateEncryptor(Key, Iv), CryptoStreamMode.Write)
+/*
 
 var passwords = Find_Passwords();
 passwords.Add(All.FindByType(typeof(ArrayInitializer)).FindByAssignmentSide(CxList.AssignmentSide.Right));

@@ -1,25 +1,26 @@
-//**********************************************************//
-//	                                        		        //
-// Find methods template and template_set in lodash library //
-// This is need for indicate using vulnerable methods       //
-//	                                        		        //
-//**********************************************************//
+/*
+    Поиск использования в коде уязвимых методов в библиотеке Lodash
+*/
 
 // Ищем все строки: в которых встречается строка lodash (предполагаем, что это объявление импорта библиотеки
 CxList lodash_strings = Find_String_Literal().FindByShortName("*lodash*");
+
 // Ищем все данные: которые взаимодействуют с этими строками
 CxList data_on_lodash = All.InfluencedBy(lodash_strings);
 
 
 // Задаем список уязвимых методов
 List<string> vulnerable_methods = new List<string> {"template", "*set"};
+
 // Ищем все наши уязвимые методы, которые перечисленны в уязвимостях и отфильтровываем их только там, где они вызывались
 CxList vulnerableMethods = All.FindByShortNames(vulnerable_methods).FindByType(typeof(MethodInvokeExpr));
+
 //Находим все данные: которые взаимодействуют с данными методами
 CxList vulnFlow = All.InfluencedBy(vulnerableMethods);
 
 // Если есть пересечение по этим данным - кладем в результат
 result = vulnFlow * data_on_lodash;
+
 // Формируем список путей по которым мы уже прошли, чтобы фильтровать в дальнейшем дубли
 List<string> lodash_result_path = new List<string> {};
 foreach(CxList lodash_result in result)

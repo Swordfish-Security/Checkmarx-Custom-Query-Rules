@@ -1,9 +1,7 @@
-//*************************************************************************************//
-//	                                        										   //
-// https://xakep.ru/2017/08/14/android-task-hijacking/                                 //
-// Find startActivity with FLAG_ACTIVITY_NEW_TASK and without FLAG_ACTIVITY_CLEAR_TASK //
-//	                                        										   //
-//*************************************************************************************//
+/*
+    Поиск подверженных уязвимости [Task Hijacking]() компонент приложения
+    https://xakep.ru/2017/08/14/android-task-hijacking/
+*/
 
 // Find Intents with FLAG_ACTIVITY_NEW_TASK
 CxList new_task = All.DataInfluencedBy(All.FindByName("Intent.FLAG_ACTIVITY_NEW_TASK"));

@@ -1,7 +1,5 @@
-//****************************************************//
-//                                                    //
-// Find cleartextTraffic settings in network settings //
-//                                                    //
-//****************************************************//
+/*
+    Проверка сетевых настроек, разрешающих взаимодействие по HTTP
+*/
 
 result = cxXPath.FindXmlAttributesByNameAndValue("*.xml", 8, "cleartextTrafficPermitted", "true", false, true);

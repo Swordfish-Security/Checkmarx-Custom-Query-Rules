@@ -1,8 +1,6 @@
-//************************************************//
-//                                                //
-// Find Splicing Literal Values in slick library  //
-//	                                        	  //
-//************************************************//
+/*
+    Поиск использования Splicing Literal Values в библиотеке slick
+*/
 
 // Находим все импорты
 CxList imports = All.FindByType(typeof(Import));

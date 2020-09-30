@@ -1,8 +1,6 @@
-//****************************************************//
-//                                                    //
-// Find non system trust-anchors  in network settings //
-//                                                    //
-//****************************************************//
+/*
+    Проверка корректности настройки доверия сертификатам
+*/
 
 CxList certificates = All.NewCxList();
 CxList certificatesForDebug = All.NewCxList();
