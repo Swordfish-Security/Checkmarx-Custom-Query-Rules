@@ -34,7 +34,7 @@
   
 * `kotlin`
   * `Sensitive_Data_Exposure` - доработка правила для поиска sensitive данных
-  * `Using_Cert_From_Assets` - - использование сертификатов из ресурсов приложения
+  * `Using_Cert_From_Assets` - использование сертификатов из ресурсов приложения
   
 * `Objective-C`
   * `Sensitive_Info_In_Plist.txt` - поиск sensitive данных в файлах формата .plist
